@@ -1,122 +1,74 @@
-# Safe Mac Cleaner — Run instructions
+# Safe Mac Cleaner
 
-Quick start
+> A lightweight macOS cleanup utility for safe cache, log, trash, and regenerable file cleanup.
 
-- macOS / Linux:
-  1. Make the launcher executable: `chmod +x run`
-  2. Run: `./run`
+![macOS](https://img.shields.io/badge/platform-macOS-000000?style=for-the-badge&logo=apple)
+![Python](https://img.shields.io/badge/python-3.x-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![Shell](https://img.shields.io/badge/shell-bash-4EAA25?style=for-the-badge&logo=gnubash&logoColor=white)
 
-- Alternative (module):
-  - `python3 -m script`
+## Quick Start
 
-- Windows (PowerShell):
-  - `.\run.ps1`
+1. Make the launcher executable:
 
-Notes
-- The `run` wrapper simply runs `script` as a module so you don't need to type `python script.py`.
-- I did not execute the cleaner; run it locally when you're ready.
+   ```bash
+   chmod +x run
+   ```
 
-Clone & run (for repo visitors)
---------------------------------
+2. Run the cleaner:
 
-After someone clones your repo they can wire and run quickly:
+   ```bash
+   ./run
+   ```
 
-```bash
-git clone https://github.com/<username>/<repo>.git
-cd <repo>
-./setup.sh --run
+3. Optional setup flow:
+
+   ```bash
+   ./setup.sh
+   ./setup.sh --run
+   ```
+
+Windows:
+
+```powershell
+.\run.ps1
 ```
 
-One-liner (runs the cleaner after wiring; will prompt for confirmation unless you pass `--yes`):
+## What It Does
 
-```bash
-git clone https://github.com/<username>/<repo>.git && cd <repo> && ./setup.sh --run
-```
+| Area | Action |
+| --- | --- |
+| Cache | Clears selected user cache folders |
+| Trash | Empties trash contents |
+| Logs | Removes safe log files |
+| Temp Data | Cleans safe temporary files |
+| Apps | Removes a few regenerable application caches |
+| Bin Folders | Scans user-local bin folders for broken symlinks and junk files |
 
-Notes & safety
-- `./setup.sh` makes `run` executable. `--run` will execute the cleaner and may delete files.
-- Do NOT pipe remote scripts to `bash` from unknown sources. If you want a curl|bash one-liner, add it explicitly but be aware of the risks.
-- Replace `<username>` and `<repo>` with your GitHub values before publishing.
+## Requirements
 
-Remote install (one-liner)
---------------------------
+- macOS
+- `python3`
+- Bash
 
-If you want visitors to be able to copy your GitHub URL and run a single command, provide the following one-liner (replace placeholders):
+## Safety
 
-```bash
-# Interactive (recommended):
-curl -fsSL https://raw.githubusercontent.com/<username>/<repo>/main/install.sh | bash -s -- https://github.com/<username>/<repo>.git
+> This tool deletes files permanently. Review [`script.py`](script.py) before running it.
 
-# Non-interactive (DANGEROUS — will skip prompts):
-curl -fsSL https://raw.githubusercontent.com/<username>/<repo>/main/install.sh | bash -s -- https://github.com/<username>/<repo>.git --run --yes
-```
+- Designed for local use only
+- Avoids remote download or install flows
+- Targets only regenerable or user-cache data
 
-What the one-liner does:
-- Downloads `install.sh` from the repository and runs it with `bash`.
-- `install.sh` clones the repository to a temporary directory and (if confirmed) runs `./setup.sh --run` from the cloned repo.
+## Project Structure
 
-Safety notes
-- Never encourage running these one-liners on untrusted machines or from untrusted sources.
-- The installer prompts by default; `--yes` disables prompts and is only for automation where you explicitly accept the risk.
-- If you'd prefer not to support direct piping, users can still run the safe clone-and-run sequence documented above.
+| File | Purpose |
+| --- | --- |
+| [`run`](run) | Local launcher for the cleaner |
+| [`setup.sh`](setup.sh) | Makes `run` executable and can launch the cleaner |
+| [`run.ps1`](run.ps1) | PowerShell launcher |
+| [`script.py`](script.py) | Main cleanup logic |
 
-Paste-URL & run (no clone)
---------------------------
+## Notes
 
-If you want users to run the cleanup without cloning the repo, they can fetch and execute `script.py` directly. Replace the URL below with your repository URL (e.g. `https://github.com/meet4041/Mac-Window-Spaceprovider`):
-
-```bash
-# Interactive (recommended) — paste your repo URL as the only argument:
-curl -fsSL https://raw.githubusercontent.com/meet4041/Mac-Window-Spaceprovider/main/run-direct.sh | bash -s -- https://github.com/meet4041/Mac-Window-Spaceprovider
-
-# Non-interactive (DANGEROUS — skips confirmation):
-curl -fsSL https://raw.githubusercontent.com/meet4041/Mac-Window-Spaceprovider/main/run-direct.sh | bash -s -- https://github.com/meet4041/Mac-Window-Spaceprovider --yes
-```
-
-What this does:
-- `run-direct.sh` downloads `script.py` from the repo's `main` branch and runs it with `python3` without cloning the repo.
-- It prompts for confirmation before executing unless `--yes` is passed.
-
-Warning: executing remote scripts directly is risky. Only run these commands for repositories you trust.
-
-
-
-
-Publishing to GitHub
---------------------
-
-Quick steps (recommended):
-
-1. Configure git (if not already):
-
-```bash
-git config --global user.name "Your Name"
-git config --global user.email "you@example.com"
-```
-
-2. Initialize, commit, and create a public repo using the GitHub CLI (fast):
-
-```bash
-git init
-git add .
-git commit -m "Initial commit"
-git branch -M main
-# Replace <repo-name> with the name you want (e.g. mac-cleanup)
-gh repo create <repo-name> --public --source=. --remote=origin --push
-```
-
-3. If you don't have `gh`, create the repo on github.com/new then run:
-
-```bash
-# using SSH
-git remote add origin git@github.com:<username>/<repo>.git
-# or using HTTPS
-# git remote add origin https://github.com/<username>/<repo>.git
-git push -u origin main
-```
-
-Notes
-- `gh` is optional but makes creating a public repo and pushing easier.
-- Replace placeholders (`Your Name`, `you@example.com`, `<repo-name>`, `<username>`) before running.
-- The repository will be public when you create it with `--public` or set visibility on the website.
-
+- `run` launches `script.py` through `python3 -m script`.
+- `setup.sh` is intentionally minimal.
+- The project is meant to stay local and simple.

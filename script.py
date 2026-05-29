@@ -25,7 +25,6 @@ import shutil
 import subprocess
 import tempfile
 from pathlib import Path
-from datetime import datetime
 
 # ============================================================
 # CONFIGURATION
@@ -89,6 +88,14 @@ def safe_remove(path):
         print(f"[!] Failed: {path} -> {e}")
 
 
+def clear_directory_contents(path):
+    if not os.path.isdir(path):
+        return
+
+    for item in os.listdir(path):
+        safe_remove(os.path.join(path, item))
+
+
 # ============================================================
 # 1. SYSTEM CACHE CLEANUP
 # ============================================================
@@ -96,15 +103,10 @@ def safe_remove(path):
 def clean_system_cache():
     print("\n[1] Cleaning System Cache...")
 
-    paths = [
-        HOME / "Library/Caches",
-        "/Library/Caches"
-    ]
+    paths = [HOME / "Library/Caches"]
 
     for path in paths:
-        if os.path.exists(path):
-            for item in os.listdir(path):
-                safe_remove(os.path.join(path, item))
+        clear_directory_contents(path)
 
 
 # ============================================================
@@ -122,7 +124,7 @@ def clean_browser_cache():
     ]
 
     for path in browser_paths:
-        safe_remove(path)
+        clear_directory_contents(path)
 
 
 # ============================================================
@@ -133,7 +135,7 @@ def clean_trash():
     print("\n[3] Cleaning Trash...")
 
     trash = HOME / ".Trash"
-    safe_remove(trash)
+    clear_directory_contents(trash)
 
 
 # ============================================================
@@ -154,7 +156,7 @@ def clean_application_cache():
     ]
 
     for app in temp_apps:
-        safe_remove(app_cache / app / "Cache")
+        clear_directory_contents(app_cache / app / "Cache")
 
 
 # ============================================================
@@ -166,12 +168,11 @@ def clean_messaging_cache():
 
     paths = [
         HOME / "Library/Application Support/Slack/Cache",
-        HOME / "Library/Application Support/discord/Cache",
-        HOME / "Library/Application Support/Telegram Desktop/tdata"
+        HOME / "Library/Application Support/discord/Cache"
     ]
 
     for path in paths:
-        safe_remove(path)
+        clear_directory_contents(path)
 
 
 # ============================================================
@@ -186,7 +187,7 @@ def clean_mail_cache():
     ]
 
     for path in paths:
-        safe_remove(path)
+        clear_directory_contents(path)
 
 
 # ============================================================
@@ -196,13 +197,10 @@ def clean_mail_cache():
 def clean_logs():
     print("\n[7] Cleaning Logs...")
 
-    paths = [
-        HOME / "Library/Logs",
-        "/Library/Logs"
-    ]
+    paths = [HOME / "Library/Logs"]
 
     for path in paths:
-        safe_remove(path)
+        clear_directory_contents(path)
 
 
 # ============================================================
@@ -212,8 +210,8 @@ def clean_logs():
 def clean_temp_files():
     print("\n[8] Cleaning Temporary Files...")
 
-    temp_dir = tempfile.gettempdir()
-    safe_remove(temp_dir)
+    print(f"Skipping shared temp directory: {tempfile.gettempdir()}")
+    print("Shared temp cleanup can affect other apps, so it is left untouched.")
 
 
 # ============================================================
@@ -228,7 +226,7 @@ def clean_finder_cache():
     ]
 
     for path in paths:
-        safe_remove(path)
+        clear_directory_contents(path)
 
 
 # ============================================================
@@ -243,7 +241,7 @@ def clean_system_junk():
     ]
 
     for path in paths:
-        safe_remove(path)
+        clear_directory_contents(path)
 
 
 # ============================================================
@@ -258,7 +256,7 @@ def clean_crash_reports():
     ]
 
     for path in paths:
-        safe_remove(path)
+        clear_directory_contents(path)
 
 
 # ============================================================
@@ -278,34 +276,15 @@ def clean_font_cache():
 def clean_dns_cache():
     print("\n[13] Flushing DNS Cache...")
 
-    subprocess.run([
-        "sudo",
-        "dscacheutil",
-        "-flushcache"
-    ])
+    subprocess.run(["dscacheutil", "-flushcache"], stderr=subprocess.DEVNULL)
 
 
 # ============================================================
-# 14. SYSTEM DIAGNOSTIC FILE CLEANUP
-# ============================================================
-
-def clean_diagnostics():
-    print("\n[14] Cleaning Diagnostics...")
-
-    paths = [
-        HOME / "Library/Logs/DiagnosticReports"
-    ]
-
-    for path in paths:
-        safe_remove(path)
-
-
-# ============================================================
-# 15. PACKAGE MANAGER CACHE CLEANUP
+# 14. PACKAGE MANAGER CACHE CLEANUP
 # ============================================================
 
 def clean_package_manager_cache():
-    print("\n[15] Cleaning Package Manager Cache...")
+    print("\n[14] Cleaning Package Manager Cache...")
 
     subprocess.run(["brew", "cleanup"], stderr=subprocess.DEVNULL)
 
@@ -315,14 +294,9 @@ def clean_package_manager_cache():
 # ============================================================
 
 def clean_old_updates():
-    print("\n[16] Cleaning Old Updates...")
+    print("\n[15] Skipping System Update Cache...")
 
-    paths = [
-        "/Library/Updates"
-    ]
-
-    for path in paths:
-        safe_remove(path)
+    print("System-wide update caches are left untouched.")
 
 
 # ============================================================
@@ -338,37 +312,11 @@ def clean_cloud_cache():
     ]
 
     for path in paths:
-        safe_remove(path)
+        clear_directory_contents(path)
 
 
 # ============================================================
-# 18. LEFTOVER APP FILE CLEANUP
-# ============================================================
-
-def clean_leftover_app_files():
-    print("\n[18] Cleaning Leftover App Files...")
-
-    paths = [
-        HOME / "Library/Application Support"
-    ]
-
-    # Example placeholder cleanup logic
-    print("Scanning leftover support files...")
-
-
-# ============================================================
-# 19. RECYCLE BIN DEEP CLEANUP
-# ============================================================
-
-def deep_trash_cleanup():
-    print("\n[19] Deep Trash Cleanup...")
-
-    trash = HOME / ".Trash"
-    safe_remove(trash)
-
-
-# ============================================================
-# 20. HIDDEN SYSTEM STORAGE ANALYZER
+# 18. HIDDEN SYSTEM STORAGE ANALYZER
 # ============================================================
 
 def analyze_hidden_storage():
@@ -386,62 +334,32 @@ def analyze_hidden_storage():
 
 
 # ============================================================
-# 21. RAM OPTIMIZATION
+# 19. RAM OPTIMIZATION
 # ============================================================
 
 def optimize_ram():
-    print("\n[21] Optimizing RAM...")
+    print("\n[19] Optimizing RAM...")
 
     subprocess.run(["purge"], stderr=subprocess.DEVNULL)
 
 
 # ============================================================
-# 22. BACKGROUND PROCESS OPTIMIZER
-# ============================================================
-
-def optimize_background_processes():
-    print("\n[22] Optimizing Background Processes...")
-
-    print("Review Activity Monitor manually for safety.")
-
-
-# ============================================================
-# 23. STARTUP APP OPTIMIZER
-# ============================================================
-
-def startup_optimizer():
-    print("\n[23] Startup App Optimizer...")
-
-    print("Check: System Settings > Login Items")
-
-
-# ============================================================
-# 24. LOGIN ITEMS MANAGER
-# ============================================================
-
-def login_items_manager():
-    print("\n[24] Login Items Manager...")
-
-    print("Managing startup applications...")
-
-
-# ============================================================
-# 25. NOTIFICATION CACHE CLEANUP
+# 20. NOTIFICATION CACHE CLEANUP
 # ============================================================
 
 def clean_notification_cache():
-    print("\n[25] Cleaning Notification Cache...")
+    print("\n[20] Cleaning Notification Cache...")
 
     paths = [
         HOME / "Library/Application Support/NotificationCenter"
     ]
 
     for path in paths:
-        safe_remove(path)
+        clear_directory_contents(path)
 
 
 # ============================================================
-# 26. CLIPBOARD CACHE CLEANUP
+# 21. CLIPBOARD CACHE CLEANUP
 # ============================================================
 
 def clean_clipboard_cache():
@@ -451,64 +369,30 @@ def clean_clipboard_cache():
 
 
 # ============================================================
-# 27. BROWSER TEMPORARY STORAGE CLEANUP
+# 22. BROWSER TEMPORARY STORAGE CLEANUP
 # ============================================================
 
 def clean_browser_temp_storage():
-    print("\n[27] Cleaning Browser Temporary Storage...")
+    print("\n[22] Cleaning Browser Temporary Storage...")
 
     paths = [
         HOME / "Library/Application Support/Google/Chrome/Default/Code Cache"
     ]
 
     for path in paths:
-        safe_remove(path)
+        clear_directory_contents(path)
 
 
 # ============================================================
-# 28. APPLICATION TEMPORARY DATA CLEANUP
-# ============================================================
-
-def clean_application_temp_data():
-    print("\n[28] Cleaning Application Temporary Data...")
-
-    temp_support = HOME / "Library/Application Support"
-
-    print(f"Scanning temporary app data in: {temp_support}")
-
-
-# ============================================================
-# 29. UNUSED LANGUAGE RESOURCE CLEANUP
-# ============================================================
-
-def clean_unused_languages():
-    print("\n[29] Cleaning Unused Language Resources...")
-
-    print("Optional advanced cleanup.")
-
-
-# ============================================================
-# 30. SYSTEM PERFORMANCE OPTIMIZATION
-# ============================================================
-
-def system_performance_optimization():
-    print("\n[30] System Performance Optimization...")
-
-    print("Running overall optimization tasks...")
-
-
-# ============================================================
-# 31. BIN DIRECTORY CLEANUP
+# 23. BIN DIRECTORY CLEANUP
 # ============================================================
 
 def clean_bin_directories():
-    print("\n[31] Cleaning Bin Directories...")
+    print("\n[23] Cleaning Bin Directories...")
 
     bin_paths = [
         HOME / "bin",
-        HOME / ".local/bin",
-        Path("/opt/homebrew/bin"),
-        Path("/usr/local/bin")
+        HOME / ".local/bin"
     ]
 
     for path in bin_paths:
@@ -575,23 +459,14 @@ def run_all_cleanups():
     clean_crash_reports()
     clean_font_cache()
     clean_dns_cache()
-    clean_diagnostics()
     clean_package_manager_cache()
     clean_old_updates()
     clean_cloud_cache()
-    clean_leftover_app_files()
-    deep_trash_cleanup()
     analyze_hidden_storage()
     optimize_ram()
-    optimize_background_processes()
-    startup_optimizer()
-    login_items_manager()
     clean_notification_cache()
     clean_clipboard_cache()
     clean_browser_temp_storage()
-    clean_application_temp_data()
-    clean_unused_languages()
-    system_performance_optimization()
 
     print("\n" + "=" * 60)
     print(f"TOTAL RECOVERED: {format_size(TOTAL_RECOVERED)}")
