@@ -19,33 +19,6 @@
 curl -fsSL https://raw.githubusercontent.com/meet4041/Mac-Window-Spaceprovider/main/run-direct.sh | bash -s -- https://github.com/meet4041/Mac-Window-Spaceprovider
 ```
 
-### Local Run
-
-1. Make the launcher executable:
-
-   ```bash
-   chmod +x run
-   ```
-
-2. Run the cleaner:
-
-   ```bash
-   ./run
-   ```
-
-3. Optional setup flow:
-
-   ```bash
-   ./setup.sh
-   ./setup.sh --run
-   ```
-
-Windows:
-
-```powershell
-.\run.ps1
-```
-
 ## What It Does
 
 | Area | Action |
@@ -67,7 +40,6 @@ Windows:
 
 > This tool deletes files permanently. Review [`script.py`](script.py) before running it.
 
-- Designed for local use only
 - The main command downloads and runs `run-direct.sh` from the repository
 - Targets only regenerable or user-cache data
 
@@ -75,14 +47,10 @@ Windows:
 
 | File | Purpose |
 | --- | --- |
-| [`run`](run) | Local launcher for the cleaner |
-| [`setup.sh`](setup.sh) | Makes `run` executable and can launch the cleaner |
 | [`run-direct.sh`](run-direct.sh) | Remote launcher used by the main curl command |
-| [`run.ps1`](run.ps1) | PowerShell launcher |
 | [`script.py`](script.py) | Main cleanup logic |
 
 ## Notes
 
-- `run` launches `script.py` through `python3 -m script`.
-- `setup.sh` is intentionally minimal.
-- The project is meant to stay local and simple.
+- The project is intentionally minimal.
+- The remote command fetches `run-direct.sh` and runs the cleaner from the repository.
