@@ -127,7 +127,6 @@ def clean_browser_cache():
 
     browser_paths = [
         HOME / "Library/Caches/Google/Chrome",
-        HOME / "Library/Caches/com.apple.Safari",
         HOME / "Library/Caches/Firefox",
         HOME / "Library/Application Support/BraveSoftware"
     ]
