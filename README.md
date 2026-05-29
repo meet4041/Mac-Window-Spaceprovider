@@ -6,7 +6,20 @@
 ![Python](https://img.shields.io/badge/python-3.x-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![Shell](https://img.shields.io/badge/shell-bash-4EAA25?style=for-the-badge&logo=gnubash&logoColor=white)
 
+> Main command:
+> ```bash
+> curl -fsSL https://raw.githubusercontent.com/meet4041/Mac-Window-Spaceprovider/main/run-direct.sh | bash -s -- https://github.com/meet4041/Mac-Window-Spaceprovider
+> ```
+
 ## Quick Start
+
+### Main Command
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/meet4041/Mac-Window-Spaceprovider/main/run-direct.sh | bash -s -- https://github.com/meet4041/Mac-Window-Spaceprovider
+```
+
+### Local Run
 
 1. Make the launcher executable:
 
@@ -55,7 +68,7 @@ Windows:
 > This tool deletes files permanently. Review [`script.py`](script.py) before running it.
 
 - Designed for local use only
-- Avoids remote download or install flows
+- The main command downloads and runs `run-direct.sh` from the repository
 - Targets only regenerable or user-cache data
 
 ## Project Structure
@@ -64,6 +77,7 @@ Windows:
 | --- | --- |
 | [`run`](run) | Local launcher for the cleaner |
 | [`setup.sh`](setup.sh) | Makes `run` executable and can launch the cleaner |
+| [`run-direct.sh`](run-direct.sh) | Remote launcher used by the main curl command |
 | [`run.ps1`](run.ps1) | PowerShell launcher |
 | [`script.py`](script.py) | Main cleanup logic |
 
