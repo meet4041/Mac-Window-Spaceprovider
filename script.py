@@ -92,7 +92,16 @@ def clear_directory_contents(path):
     if not os.path.isdir(path):
         return
 
-    for item in os.listdir(path):
+    try:
+        entries = os.listdir(path)
+    except PermissionError as e:
+        print(f"[!] Skipping protected directory: {path} -> {e}")
+        return
+    except Exception as e:
+        print(f"[!] Skipping unreadable directory: {path} -> {e}")
+        return
+
+    for item in entries:
         safe_remove(os.path.join(path, item))
 
 
