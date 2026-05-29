@@ -60,6 +60,26 @@ Safety notes
 - The installer prompts by default; `--yes` disables prompts and is only for automation where you explicitly accept the risk.
 - If you'd prefer not to support direct piping, users can still run the safe clone-and-run sequence documented above.
 
+Paste-URL & run (no clone)
+--------------------------
+
+If you want users to run the cleanup without cloning the repo, they can fetch and execute `script.py` directly. Replace the URL below with your repository URL (e.g. `https://github.com/meet4041/Mac-Window-Spaceprovider`):
+
+```bash
+# Interactive (recommended) — paste your repo URL as the only argument:
+curl -fsSL https://raw.githubusercontent.com/meet4041/Mac-Window-Spaceprovider/main/run-direct.sh | bash -s -- https://github.com/meet4041/Mac-Window-Spaceprovider
+
+# Non-interactive (DANGEROUS — skips confirmation):
+curl -fsSL https://raw.githubusercontent.com/meet4041/Mac-Window-Spaceprovider/main/run-direct.sh | bash -s -- https://github.com/meet4041/Mac-Window-Spaceprovider --yes
+```
+
+What this does:
+- `run-direct.sh` downloads `script.py` from the repo's `main` branch and runs it with `python3` without cloning the repo.
+- It prompts for confirmation before executing unless `--yes` is passed.
+
+Warning: executing remote scripts directly is risky. Only run these commands for repositories you trust.
+
+
 
 
 Publishing to GitHub
