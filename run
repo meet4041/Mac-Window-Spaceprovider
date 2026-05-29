@@ -1,9 +1,4 @@
 #!/usr/bin/env bash
 set -euo pipefail
-#
-# Minimal launcher for Safe Mac Cleaner
-# Usage:
-#   chmod +x run
-#   ./run
 
 exec python3 -m script "$@"

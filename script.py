@@ -1,25 +1,3 @@
-#!/usr/bin/env python3
-
-"""
-Safe Mac Cleaner
-----------------
-A safe macOS cleanup utility focused ONLY on:
-- system junk
-- cache
-- temporary files
-- regeneratable data
-- performance optimization
-
-This tool DOES NOT touch:
-- Photos
-- Videos
-- Documents
-- Personal downloads
-- User-created files
-
-Author: OpenAI ChatGPT
-"""
-
 import os
 import shutil
 import subprocess
