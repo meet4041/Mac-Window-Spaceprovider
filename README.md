@@ -16,6 +16,52 @@ Notes
 - The `run` wrapper simply runs `script` as a module so you don't need to type `python script.py`.
 - I did not execute the cleaner; run it locally when you're ready.
 
+Clone & run (for repo visitors)
+--------------------------------
+
+After someone clones your repo they can wire and run quickly:
+
+```bash
+git clone https://github.com/<username>/<repo>.git
+cd <repo>
+./setup.sh --run
+```
+
+One-liner (runs the cleaner after wiring; will prompt for confirmation unless you pass `--yes`):
+
+```bash
+git clone https://github.com/<username>/<repo>.git && cd <repo> && ./setup.sh --run
+```
+
+Notes & safety
+- `./setup.sh` makes `run` executable. `--run` will execute the cleaner and may delete files.
+- Do NOT pipe remote scripts to `bash` from unknown sources. If you want a curl|bash one-liner, add it explicitly but be aware of the risks.
+- Replace `<username>` and `<repo>` with your GitHub values before publishing.
+
+Remote install (one-liner)
+--------------------------
+
+If you want visitors to be able to copy your GitHub URL and run a single command, provide the following one-liner (replace placeholders):
+
+```bash
+# Interactive (recommended):
+curl -fsSL https://raw.githubusercontent.com/<username>/<repo>/main/install.sh | bash -s -- https://github.com/<username>/<repo>.git
+
+# Non-interactive (DANGEROUS — will skip prompts):
+curl -fsSL https://raw.githubusercontent.com/<username>/<repo>/main/install.sh | bash -s -- https://github.com/<username>/<repo>.git --run --yes
+```
+
+What the one-liner does:
+- Downloads `install.sh` from the repository and runs it with `bash`.
+- `install.sh` clones the repository to a temporary directory and (if confirmed) runs `./setup.sh --run` from the cloned repo.
+
+Safety notes
+- Never encourage running these one-liners on untrusted machines or from untrusted sources.
+- The installer prompts by default; `--yes` disables prompts and is only for automation where you explicitly accept the risk.
+- If you'd prefer not to support direct piping, users can still run the safe clone-and-run sequence documented above.
+
+
+
 Publishing to GitHub
 --------------------
 
